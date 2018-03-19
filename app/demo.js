@@ -38,7 +38,7 @@ const translate = new Translate({
 });
 
 // The name of the audio file to transcribe
-const fileName = './resources/stupid.wav';
+const fileName = './resources/bonjour.wav';
 
 // Reads a local audio file and converts it to base64
 const file = fs.readFileSync(fileName);
@@ -50,7 +50,7 @@ const audio = {
 };
 const config = {
   encoding: 'LINEAR16',
-  sampleRateHertz: 16000,
+  sampleRateHertz: 24000,
   languageCode: 'fr-FR',
 };
 const request = {
@@ -64,6 +64,7 @@ let stupidvar
 const target = 'en';
 
 // Detects speech in the audio file
+
 client
   .recognize(request)
   .then(data => {
@@ -73,35 +74,34 @@ client
       .join('\n');
     console.log(`Transcription: ${transcription}`);
 
-    stupidvar = response.results;
-    
-    translate
-      .translate(stupidvar, target)
-      .then(results => {
-        const translation = results[0];
-
-        console.log(stupidvar);
-        console.log(`Text: ${stupidvar}`);
-        console.log(`Translation: ${translation}`);
-      })
-      .catch(err => {
-        console.error('ERROR:', err);
-      });
+    stupidvar = transcription;
   })
+  .then( function translateApi(){
+  console.log('This is' + stupidvar)
+  translate
+    .translate(stupidvar, target)
+    .then(results => {
+      const translation = results[0];
+
+      console.log(stupidvar);
+      console.log(`Text: ${stupidvar}`);
+      console.log(`Translation: ${translation}`);
+    })
+    .catch(err => {
+      console.error('ERROR:', err);
+    });
+  //  [END speech_quickstart]
+})
   .catch(err => {
     console.error('ERROR:', err);
   });
 
-// translate
-//   .translate(stupidvar, target)
-//   .then(results => {
-//     const translation = results[0];
 
-//     console.log(stupidvar);
-//     console.log(`Text: ${stupidvar}`);
-//     console.log(`Translation: ${translation}`);
-//   })
-//   .catch(err => {
-//     console.error('ERROR:', err);
-//   });
-// [END speech_quickstart]
+
+
+// async function asyncCall(){
+//   await speechApi();
+//   translateApi();
+// }
+
+// asyncCall();
